@@ -4,6 +4,10 @@
   "integrationFolder": "cypress/tests",
   "viewportHeight": 1000,
   "viewportWidth": 1280,
+  "testFiles": [
+    "**/*.feature",
+    "**/*.spec.*"
+  ],
   "retries": {
     "runMode": 1,
     "openMode": 1

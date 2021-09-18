@@ -1,10 +1,16 @@
+/// <reference types="cypress" />
+
+import codeCoverageTask from "@cypress/code-coverage/task";
+import { percyHealthCheck } from "@percy/cypress/task";
+import axios from "axios";
+import Promise from "bluebird";
+import dotenv from "dotenv";
 import _ from "lodash";
 import path from "path";
-import axios from "axios";
-import dotenv from "dotenv";
-import Promise from "bluebird";
-import { percyHealthCheck } from "@percy/cypress/task";
-import codeCoverageTask from "@cypress/code-coverage/task";
+
+const browserify = require('@cypress/browserify-preprocessor');
+const cucumber = require('cypress-cucumber-preprocessor').default;
+const resolve = require('resolve');
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -68,5 +74,14 @@ export default (on, config) => {
   });
 
   codeCoverageTask(on, config);
+
+  const options = {
+    ...browserify.defaultOptions,
+    typescript: resolve.sync('typescript', { baseDir: config.projectRoot }),
+  };
+
+
+  on('file:preprocessor', cucumber(options));
+  
   return config;
 };
