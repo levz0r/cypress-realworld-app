@@ -12,6 +12,8 @@ const browserify = require('@cypress/browserify-preprocessor');
 const cucumber = require('cypress-cucumber-preprocessor').default;
 const resolve = require('resolve');
 
+const gmail_tester = require("gmail-tester");
+
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
@@ -71,6 +73,15 @@ export default (on, config) => {
     "find:database"(queryPayload) {
       return queryDatabase(queryPayload, (data, attrs) => _.find(data.results, attrs));
     },
+
+    async "gmail:get-messages"(args) {
+      const messages = await gmail_tester.check_inbox(
+        path.resolve(__dirname, "credentials.json"),
+        path.resolve(__dirname, "token.json"),
+        args.options
+      );
+      return messages;
+    }
   });
 
   codeCoverageTask(on, config);
@@ -82,6 +93,6 @@ export default (on, config) => {
 
 
   on('file:preprocessor', cucumber(options));
-  
+
   return config;
 };

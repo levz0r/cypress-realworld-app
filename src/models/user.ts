@@ -18,6 +18,7 @@ export interface User {
   defaultPrivacyLevel: DefaultPrivacyLevel;
   createdAt: Date;
   modifiedAt: Date;
+  activationToken: string;
 }
 
 export type UserSettingsPayload = Pick<
@@ -29,4 +30,4 @@ export type SignInPayload = Pick<User, "username" | "password"> & {
   remember?: Boolean;
 };
 
-export type SignUpPayload = Pick<User, "username" | "password" | "firstName" | "lastName">;
+export type SignUpPayload = Pick<User, "username" | "password" | "firstName" | "lastName" | "email">;

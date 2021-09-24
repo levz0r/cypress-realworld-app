@@ -1,12 +1,13 @@
-import dotenv from "dotenv";
-import { set } from "lodash";
-import { Request, Response, NextFunction } from "express";
-import { validationResult } from "express-validator";
-import jwt from "express-jwt";
-import jwksRsa from "jwks-rsa";
-
 // @ts-ignore
 import OktaJwtVerifier from "@okta/jwt-verifier";
+import aws from "aws-sdk";
+import dotenv from "dotenv";
+import { NextFunction, Request, Response } from "express";
+import jwt from "express-jwt";
+import { validationResult } from "express-validator";
+import jwksRsa from "jwks-rsa";
+import { set } from "lodash";
+import nodemailer from "nodemailer";
 // @ts-ignore
 import awsConfig from "../src/aws-exports";
 
@@ -122,3 +123,32 @@ export const validateMiddleware = (validations: any[]) => {
     res.status(422).json({ errors: errors.array() });
   };
 };
+
+const ses = new aws.SES({
+  apiVersion: "2010-12-01",
+  region: "eu-central-1",
+});
+
+const transporter = nodemailer.createTransport({
+  SES: { ses, aws },
+});
+
+export const sendActivationEmail = async (email: string, activationToken: string) => {
+  return transporter.sendMail(
+    {
+      from: "no-reply@rents.bot",
+      to: email,
+      subject: "Activate your account on the RWA",
+      html: `Your activation token is: <b>${activationToken}</b>`
+    },
+    (err: any, info: any) => {
+      if (err) {
+        console.error(err)
+      }
+      if (info) {
+        console.log(info.envelope);
+        console.log(info.messageId);
+      }
+    }
+  );
+}

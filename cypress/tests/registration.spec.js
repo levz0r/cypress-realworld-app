@@ -83,4 +83,50 @@ describe("Regsitration process", function () {
     // Main screen
     cy.get("user-onboarding-dialog").should("not.exist"); // Assertion #3: Onboarding process is over. The dialog has been removed from the DOM.
   });
+
+  it("should send an email with a correct activation token", function () {
+    cy.visit("/signin");
+    cy.getBySel("signup").click();
+
+    const firstname = generate_name();
+    const lastname = generate_name();
+    const username = generate_username();
+    const password = generate_password();
+    const email = `lev+${generate_number()}@*****`;
+
+    Cypress.log({ name: "GENERATED", message: `First name: ${firstname}` });
+    Cypress.log({ name: "GENERATED", message: `Last name: ${lastname}` });
+    Cypress.log({ name: "GENERATED", message: `Username: ${username}` });
+    Cypress.log({ name: "GENERATED", message: `Password: ${password}` });
+    Cypress.log({ name: "GENERATED", message: `Email: ${email}` });
+
+    cy.getBySel("signup-first-name").type(firstname);
+    cy.getBySel("signup-last-name").type(lastname);
+    cy.getBySel("signup-email").type(email);
+    cy.getBySel("signup-username").type(username);
+    cy.getBySel("signup-password").type(password);
+    cy.getBySel("signup-confirmPassword").type(password);
+    cy.getBySel("signup-submit").click();
+
+    cy.task("gmail:get-messages", {
+      options: {
+        from: "no-reply@*****",
+        to: email,
+        subject: "Activate your account on the RWA",
+        include_body: true,
+        wait_time_sec: 5
+      }
+    }).then(emails => {
+      assert.equal(
+        1,
+        emails.length,
+        "Expected to find activation email, but none was found"
+      );
+      const activation_token_match = emails[0].body.html.split(" ").pop().match(/<b>(.*)<\/b>/);
+      cy.database("filter", "users").then(users => {
+        const user = users.find(u => u.email === email);
+        assert.equal(user.activationToken, activation_token_match[1], "Expected activation tokens to match")
+      })
+    })
+  })
 });

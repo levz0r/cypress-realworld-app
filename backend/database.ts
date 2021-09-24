@@ -1,70 +1,25 @@
-import path from "path";
 import bcrypt from "bcryptjs";
-import fs from "fs";
-import { v4 } from "uuid";
-import {
-  uniqBy,
-  map,
-  sample,
-  reject,
-  includes,
-  orderBy,
-  flow,
-  flatMap,
-  curry,
-  get,
-  constant,
-  filter,
-  inRange,
-  remove,
-} from "lodash/fp";
 import { isWithinInterval } from "date-fns";
-import low from "lowdb";
-import FileSync from "lowdb/adapters/FileSync";
-import shortid from "shortid";
-import {
-  BankAccount,
-  Transaction,
-  User,
-  Contact,
-  TransactionStatus,
-  TransactionRequestStatus,
-  Like,
-  Comment,
-  PaymentNotification,
-  PaymentNotificationStatus,
-  LikeNotification,
-  CommentNotification,
-  NotificationType,
-  NotificationPayloadType,
-  NotificationsType,
-  TransactionResponseItem,
-  TransactionPayload,
-  BankTransfer,
-  BankTransferPayload,
-  BankTransferType,
-  NotificationResponseItem,
-  TransactionQueryPayload,
-  DefaultPrivacyLevel,
-} from "../src/models";
+import fs from "fs";
 import Fuse from "fuse.js";
 import {
-  isPayment,
-  getTransferAmount,
-  hasSufficientFunds,
-  getChargeAmount,
-  hasDateQueryFields,
-  getDateQueryFields,
-  hasAmountQueryFields,
-  getAmountQueryFields,
-  getQueryWithoutFilterFields,
-  getPayAppCreditedAmount,
-  isRequestTransaction,
-  formatFullName,
-  isLikeNotification,
-  isCommentNotification,
-} from "../src/utils/transactionUtils";
+  constant, curry, filter, flatMap, flow, get, includes, inRange, map, orderBy, reject, remove, sample, uniqBy
+} from "lodash/fp";
+import low from "lowdb";
+import FileSync from "lowdb/adapters/FileSync";
+import path from "path";
+import shortid from "shortid";
+import { v4 } from "uuid";
+import {
+  BankAccount, BankTransfer,
+  BankTransferPayload,
+  BankTransferType, Comment, CommentNotification, Contact, DefaultPrivacyLevel, Like, LikeNotification, NotificationPayloadType, NotificationResponseItem, NotificationsType, NotificationType, PaymentNotification,
+  PaymentNotificationStatus, Transaction, TransactionPayload, TransactionQueryPayload, TransactionRequestStatus, TransactionResponseItem, TransactionStatus, User
+} from "../src/models";
 import { DbSchema } from "../src/models/db-schema";
+import {
+  formatFullName, getAmountQueryFields, getChargeAmount, getDateQueryFields, getPayAppCreditedAmount, getQueryWithoutFilterFields, getTransferAmount, hasAmountQueryFields, hasDateQueryFields, hasSufficientFunds, isCommentNotification, isLikeNotification, isPayment, isRequestTransaction
+} from "../src/utils/transactionUtils";
 
 export type TDatabase = {
   users: User[];
@@ -191,6 +146,7 @@ export const createUser = (userDetails: Partial<User>): User => {
     defaultPrivacyLevel: userDetails.defaultPrivacyLevel!,
     createdAt: new Date(),
     modifiedAt: new Date(),
+    activationToken: v4()
   };
 
   saveUser(user);

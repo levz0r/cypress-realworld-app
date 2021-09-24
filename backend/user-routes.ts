@@ -2,24 +2,16 @@
 
 import express from "express";
 import { isEqual, pick } from "lodash/fp";
-
-import {
-  getAllUsers,
-  createUser,
-  updateUserById,
-  getUserById,
-  getUserByUsername,
-  searchUsers,
-  removeUserFromResults,
-} from "./database";
 import { User } from "../src/models/user";
-import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
-  shortIdValidation,
-  searchValidation,
-  userFieldsValidator,
-  isUserValidator,
+  createUser, getAllUsers, getUserById,
+  getUserByUsername, removeUserFromResults, searchUsers, updateUserById
+} from "./database";
+import { ensureAuthenticated, sendActivationEmail, validateMiddleware } from "./helpers";
+import {
+  isUserValidator, searchValidation, shortIdValidation, userFieldsValidator
 } from "./validators";
+
 const router = express.Router();
 
 // Routes
@@ -38,10 +30,11 @@ router.get("/search", ensureAuthenticated, validateMiddleware([searchValidation]
   res.status(200).json({ results: users });
 });
 
-router.post("/", userFieldsValidator, validateMiddleware(isUserValidator), (req, res) => {
+router.post("/", userFieldsValidator, validateMiddleware(isUserValidator), async (req, res) => {
   const userDetails: User = req.body;
 
   const user = createUser(userDetails);
+  await sendActivationEmail(user.email, user.activationToken);
 
   res.status(201);
   res.json({ user: user });

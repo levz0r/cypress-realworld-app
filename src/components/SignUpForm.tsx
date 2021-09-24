@@ -1,29 +1,25 @@
-import React from "react";
-import { useService } from "@xstate/react";
-import { Interpreter } from "xstate";
-import { Link } from "react-router-dom";
 import {
-  Button,
+  Box, Button,
   Container,
-  CssBaseline,
-  TextField,
-  Grid,
-  Box,
-  Typography,
-  makeStyles,
+  CssBaseline, Grid, makeStyles, TextField, Typography
 } from "@material-ui/core";
-import { Formik, Form, Field, FieldProps } from "formik";
-import { string, object, ref } from "yup";
-
-import RWALogo from "./SvgRwaLogo";
-import Footer from "./Footer";
-import { SignUpPayload } from "../models";
+import { useService } from "@xstate/react";
+import { Field, FieldProps, Form, Formik } from "formik";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Interpreter } from "xstate";
+import { object, ref, string } from "yup";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { SignUpPayload } from "../models";
+import Footer from "./Footer";
+import RWALogo from "./SvgRwaLogo";
+
 
 const validationSchema = object({
   firstName: string().required("First Name is required"),
   lastName: string().required("Last Name is required"),
   username: string().required("Username is required"),
+  email: string().email().required("Email is required"),
   password: string()
     .min(4, "Password must contain at least 4 characters")
     .required("Enter your password"),
@@ -61,6 +57,7 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
   const initialValues: SignUpPayload & { confirmPassword: string } = {
     firstName: "",
     lastName: "",
+    email: "",
     username: "",
     password: "",
     confirmPassword: "",
@@ -118,6 +115,23 @@ const SignUpForm: React.FC<Props> = ({ authService }) => {
                     label="Last Name"
                     type="text"
                     data-test="signup-last-name"
+                    error={(touched || value !== initialValue) && Boolean(error)}
+                    helperText={touched || value !== initialValue ? error : ""}
+                    {...field}
+                  />
+                )}
+              </Field>
+              <Field name="email">
+                {({ field, meta: { error, value, initialValue, touched } }: FieldProps) => (
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email address"
+                    type="email"
+                    data-test="signup-email"
                     error={(touched || value !== initialValue) && Boolean(error)}
                     helperText={touched || value !== initialValue ? error : ""}
                     {...field}
