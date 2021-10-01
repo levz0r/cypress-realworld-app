@@ -11,8 +11,8 @@ Feature: Sign-In Screen
 
     # Stub a response using cy.intercept()
     Scenario: An error message should be displayed when back-end returns 401
-        And 'POST' requests to '/login' returned with status 401
-        When user types 'admin' in 'signin-username'
-        When user types 'admin123!' in 'signin-password'
-        When user clicks signin-submit
+        When 'POST' requests to '/login' returned with status 401
+        And user types 'admin' in 'signin-username'
+        And user types 'admin123!' in 'signin-password'
+        And user clicks signin-submit
         Then the signin error message is displayed

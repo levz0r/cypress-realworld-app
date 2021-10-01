@@ -1,27 +1,18 @@
-import React from "react";
-import { Interpreter } from "xstate";
-import { useService } from "@xstate/react";
-import { Link } from "react-router-dom";
 import {
-  Button,
-  CssBaseline,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Grid,
-  Box,
-  Typography,
-  makeStyles,
-  Container,
+  Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, makeStyles, TextField, Typography
 } from "@material-ui/core";
-import { Formik, Form, Field, FieldProps } from "formik";
-import { string, object } from "yup";
-
-import RWALogo from "./SvgRwaLogo";
-import Footer from "./Footer";
-import { SignInPayload } from "../models";
-import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { Alert } from "@material-ui/lab";
+import { useService } from "@xstate/react";
+import { Field, FieldProps, Form, Formik } from "formik";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Interpreter } from "xstate";
+import { object, string } from "yup";
+import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
+import { SignInPayload } from "../models";
+import Footer from "./Footer";
+import RWALogo from "./SvgRwaLogo";
+
 
 const validationSchema = object({
   username: string().required("Username is required"),

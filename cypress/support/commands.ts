@@ -1,17 +1,15 @@
 // @ts-check
 ///<reference path="../global.d.ts" />
 
-import { pick } from "lodash/fp";
-import { format as formatDate } from "date-fns";
-import { isMobile } from "./utils";
-
 // Import Cypress Percy plugin command (https://docs.percy.io/docs/cypress)
 import "@percy/cypress";
-
+import { format as formatDate } from "date-fns";
+import { pick } from "lodash/fp";
+import "./auth-provider-commands/auth0";
 // Import commands for third-party auth providers
 import "./auth-provider-commands/cognito";
-import "./auth-provider-commands/auth0";
 import "./auth-provider-commands/okta";
+import { isMobile } from "./utils";
 
 // custom command to make taking snapshots with full name
 // formed from the test title + suffix easier

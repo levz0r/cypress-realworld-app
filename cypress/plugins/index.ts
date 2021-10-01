@@ -5,8 +5,11 @@ import { percyHealthCheck } from "@percy/cypress/task";
 import axios from "axios";
 import Promise from "bluebird";
 import dotenv from "dotenv";
+import * as fs from "fs";
 import _ from "lodash";
-import path from "path";
+import * as path from "path";
+import pixelmatch from "pixelmatch";
+import { PNG } from "pngjs";
 
 const browserify = require('@cypress/browserify-preprocessor');
 const cucumber = require('cypress-cucumber-preprocessor').default;
@@ -19,7 +22,7 @@ dotenv.config();
 
 const awsConfig = require(path.join(__dirname, "../../aws-exports-es5.js"));
 
-export default (on, config) => {
+const plugins = (on, config) => {
   config.env.defaultPassword = process.env.SEED_DEFAULT_USER_PASSWORD;
   config.env.paginationPageSize = process.env.PAGINATION_PAGE_SIZE;
   // Auth0
@@ -81,6 +84,33 @@ export default (on, config) => {
         args.options
       );
       return messages;
+    },
+
+    "compareSnapshots"(args) {
+      const { specName, width, height } = args;
+      const screenshotsPath = path.resolve(__dirname, `../screenshots/${specName}`);
+
+      const oldImage = path.resolve(screenshotsPath, `old_${width}x${height}.png`);
+      const actualImage = path.resolve(screenshotsPath, `actual_${width}x${height}.png`);
+      const diffImage = path.resolve(screenshotsPath, `diff_${width}x${height}.png`)
+
+      if (!fs.existsSync(oldImage)) {
+        fs.copyFileSync(actualImage, oldImage);
+      }
+      const img1 = PNG.sync.read(
+        fs.readFileSync(oldImage)
+      );
+      const img2 = PNG.sync.read(fs.readFileSync(actualImage));
+      const diff = new PNG({ width: img1.width, height: img1.height });
+
+      const result = pixelmatch(img1.data, img2.data, diff.data, width, height, {})
+      if (result) {
+        fs.writeFileSync(
+          diffImage,
+          PNG.sync.write(diff)
+        );
+      }
+      return result;
     }
   });
 
@@ -94,5 +124,11 @@ export default (on, config) => {
 
   on('file:preprocessor', cucumber(options));
 
+  on('after:screenshot', ({ path }) => {
+    fs.renameSync(path, path.replace(/ \(\d*\)/i, ''));
+  });
+
   return config;
 };
+
+export default plugins;
