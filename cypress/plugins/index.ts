@@ -103,7 +103,7 @@ const plugins = (on, config) => {
       const img2 = PNG.sync.read(fs.readFileSync(actualImage));
       const diff = new PNG({ width: img1.width, height: img1.height });
 
-      const result = pixelmatch(img1.data, img2.data, diff.data, width, height, {})
+      const result = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {})
       if (result) {
         fs.writeFileSync(
           diffImage,
