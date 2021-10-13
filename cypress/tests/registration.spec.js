@@ -33,7 +33,7 @@ function generate_password() {
   })
 }
 
-describe("Regsitration process", function () {
+describe("Registration process", function () {
   it("should be able to sign-in right after successful registration", function () {
     // Sign-in screen
     cy.visit("/signin");
@@ -43,6 +43,7 @@ describe("Regsitration process", function () {
     const lastname = generate_name();
     const username = generate_username();
     const password = generate_password();
+    const email = `lev+${generate_number()}@rents.bot`;
     const bankname = generate_username("capital");
     const routingnumber = generate_number();
     const accountnumber = generate_number();
@@ -51,6 +52,7 @@ describe("Regsitration process", function () {
     Cypress.log({ name: "GENERATED", message: `Last name: ${lastname}` });
     Cypress.log({ name: "GENERATED", message: `Username: ${username}` });
     Cypress.log({ name: "GENERATED", message: `Password: ${password}` });
+    Cypress.log({ name: "GENERATED", message: `Email: ${email}` });
     Cypress.log({ name: "GENERATED", message: `Bank name: ${bankname}` });
     Cypress.log({ name: "GENERATED", message: `Routing number: ${routingnumber}` });
     Cypress.log({ name: "GENERATED", message: `Account number: ${accountnumber}` });
@@ -58,6 +60,7 @@ describe("Regsitration process", function () {
     // Sign-up screen
     cy.getBySel("signup-first-name").type(firstname);
     cy.getBySel("signup-last-name").type(lastname);
+    cy.getBySel("signup-email").type(email);
     cy.getBySel("signup-username").type(username);
     cy.getBySel("signup-password").type(password);
     cy.getBySel("signup-confirmPassword").type(password);
@@ -92,7 +95,7 @@ describe("Regsitration process", function () {
     const lastname = generate_name();
     const username = generate_username();
     const password = generate_password();
-    const email = `lev+${generate_number()}@*****`;
+    const email = `lev+${generate_number()}@rents.bot`;
 
     Cypress.log({ name: "GENERATED", message: `First name: ${firstname}` });
     Cypress.log({ name: "GENERATED", message: `Last name: ${lastname}` });
@@ -110,7 +113,7 @@ describe("Regsitration process", function () {
 
     cy.task("gmail:get-messages", {
       options: {
-        from: "no-reply@*****",
+        from: "no-reply@rents.bot",
         to: email,
         subject: "Activate your account on the RWA",
         include_body: true,
