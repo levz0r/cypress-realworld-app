@@ -1,20 +1,12 @@
-import {
-  isRequestTransaction,
-  getFakeAmount,
-  currentUserLikesTransaction,
-  getQueryWithoutDateFields,
-  getQueryWithoutAmountFields,
-  getQueryWithoutFilterFields,
-} from "../transactionUtils";
 import faker from "faker";
-import {
-  Transaction,
-  TransactionRequestStatus,
-  DefaultPrivacyLevel,
-  TransactionStatus,
-  TransactionResponseItem,
-} from "../../models";
 import shortid from "shortid";
+import {
+  DefaultPrivacyLevel, Transaction,
+  TransactionRequestStatus, TransactionResponseItem, TransactionStatus
+} from "../../models";
+import {
+  currentUserLikesTransaction, getFakeAmount, getQueryWithoutAmountFields, getQueryWithoutDateFields, getQueryWithoutFilterFields, isRequestTransaction
+} from "../transactionUtils";
 
 const fakeTransaction = (
   requestStatus?: TransactionRequestStatus,
@@ -62,6 +54,7 @@ describe("Transaction Utils", () => {
         lastName: faker.name.lastName(),
         username: faker.internet.userName(),
         password: "abc123",
+        activationToken: faker.datatype.uuid(),
         email: faker.internet.email(),
         phoneNumber: faker.phone.phoneNumber(),
         avatar: faker.internet.avatar(),
