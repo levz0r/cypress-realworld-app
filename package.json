@@ -184,7 +184,10 @@
     "eject": "react-scripts eject",
     "codesandbox:start:api": "yarn tsnode:not-instrumented --files backend/app.ts",
     "codesandbox:start": "NODE_ENV=development TSC_COMPILE_ON_ERROR=true concurrently \"react-scripts start\" yarn:start:api:codesandbox",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "git:check:status": "git diff-index --quiet HEAD -- || echo *** There are uncommited files in Git. && exit",
+    "git:push": "git push -u origin HEAD",
+    "local:ci": "yarn git:check:status && yarn cypress:run && yarn build && yarn git:push"
   },
   "eslintConfig": {
     "env": {
