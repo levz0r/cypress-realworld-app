@@ -1,49 +1,16 @@
 /* eslint-disable import/first */
 require("dotenv").config();
 
-import shortid from "shortid";
-import faker from "faker";
 import bcrypt from "bcryptjs";
+import faker from "faker";
 import {
-  map,
-  flattenDeep,
-  times,
-  concat,
-  sample,
-  reject,
-  uniqBy,
-  flow,
-  get,
-  curry,
-  filter,
-  isEqual,
-  flattenDepth,
-  negate,
-  find,
-  intersectionWith,
-  compact,
-  differenceBy,
-  sampleSize,
+  compact, concat, curry, differenceBy, filter, find, flattenDeep, flattenDepth, flow,
+  get, intersectionWith, isEqual, map, negate, reject, sample, sampleSize, times, uniqBy
 } from "lodash/fp";
+import shortid from "shortid";
 import {
-  BankAccount,
-  User,
-  DefaultPrivacyLevel,
-  Like,
-  Comment,
-  PaymentNotification,
-  NotificationType,
-  LikeNotification,
-  CommentNotification,
-  Transaction,
-  TransactionStatus,
-  TransactionRequestStatus,
-  TransactionScenario,
-  FakeTransaction,
-  Contact,
-  BankTransferType,
-  BankTransfer,
-  PaymentNotificationStatus,
+  BankAccount, BankTransfer, BankTransferType, Comment, CommentNotification, Contact, DefaultPrivacyLevel, FakeTransaction, Like, LikeNotification, NotificationType, PaymentNotification, PaymentNotificationStatus, Transaction, TransactionRequestStatus,
+  TransactionScenario, TransactionStatus, User
 } from "../src/models";
 import { getFakeAmount } from "../src/utils/transactionUtils";
 
@@ -122,6 +89,7 @@ export const createFakeUser = (): User => {
     lastName: faker.name.lastName(),
     username: faker.internet.userName(),
     password: passwordHash,
+    activationToken: faker.datatype.uuid(),
     email: faker.internet.email(),
     phoneNumber: faker.phone.phoneNumberFormat(0),
     avatar: getUserAvatar(id),
