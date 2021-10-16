@@ -142,7 +142,7 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
 
   cy.window({ log: false }).then((win) => win.authService.send("LOGIN", { username, password }));
 
-  return cy.wait("@loginUser").then((loginUser) => {
+  cy.wait("@loginUser").then((loginUser) => {
     log.set({
       consoleProps() {
         return {
@@ -153,10 +153,15 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
         };
       },
     });
-
-    log.snapshot("after");
-    log.end();
   });
+
+  return cy
+    .getBySel("list-skeleton")
+    .should("not.exist")
+    .then(() => {
+      log.snapshot("after");
+      log.end();
+    });
 });
 
 Cypress.Commands.add("logoutByXstate", () => {
@@ -276,13 +281,10 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     return cy.get(`[data-date='${formatDate(date, "yyyy-MM-dd")}']`).click({ force: true });
   };
 
+  log.snapshot("before");
   // Focus initial viewable date picker range around target start date
-  // @ts-ignore: Cypress expects wrapped variable to be a jQuery type
-  cy.wrap(startDate.getTime()).then((now) => {
-    log.snapshot("before");
-    // @ts-ignore
-    cy.clock(now, ["Date"]);
-  });
+  // @ts-ignore
+  cy.clock(startDate.getTime(), ["Date"]);
 
   // Open date range picker
   cy.getBySelLike("filter-date-range-button").click({ force: true });
