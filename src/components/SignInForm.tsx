@@ -144,7 +144,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                 </Grid>
                 <Grid item>
                   <Link data-test="signup" to="/signup">
-                    {"Don't have an account? Sign Up"}
+                    {"Don't have an account? Sign Up Now!"}
                   </Link>
                 </Grid>
               </Grid>
