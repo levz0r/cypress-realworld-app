@@ -15,7 +15,7 @@ import RWALogo from "./SvgRwaLogo";
 
 
 const validationSchema = object({
-  username: string().required("Username is required"),
+  username: string().required("Username is mandatory."),
   password: string()
     .min(4, "Password must contain at least 4 characters")
     .required("Enter your password"),
@@ -144,7 +144,7 @@ const SignInForm: React.FC<Props> = ({ authService }) => {
                 </Grid>
                 <Grid item>
                   <Link data-test="signup" to="/signup">
-                    {"Don't have an account? Sign Up Now!"}
+                    {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
               </Grid>
