@@ -15,7 +15,7 @@ import RWALogo from "./SvgRwaLogo";
 
 
 const validationSchema = object({
-  username: string().required("Username is mandatory."),
+  username: string().required("Username is required"),
   password: string()
     .min(4, "Password must contain at least 4 characters")
     .required("Enter your password"),
