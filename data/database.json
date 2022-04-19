@@ -74,6 +74,19 @@
       "balance": 75369,
       "createdAt": "2020-02-11T21:26:46.510Z",
       "modifiedAt": "2020-05-21T15:15:33.944Z"
+    },
+    {
+      "id": "gApyGpRoP",
+      "uuid": "69cff048-378b-44a6-961e-da1976aab503",
+      "firstName": "Lev",
+      "lastName": "Gelfenbuim",
+      "username": "levz0r",
+      "password": "$2a$10$By21gXVjv/AuAIvU0VKcd.XdKWankNmc1KvCkWVPHH9tVPxNHzmnm",
+      "email": "levz0r@gmail.com",
+      "balance": 0,
+      "createdAt": "2022-01-21T08:33:45.763Z",
+      "modifiedAt": "2022-01-21T08:33:45.763Z",
+      "activationToken": "8a4f533b-46bd-4427-ab24-16a4bab206c2"
     }
   ],
   "contacts": [
@@ -253,6 +266,17 @@
       "isDeleted": false,
       "createdAt": "2019-09-30T14:20:07.043Z",
       "modifiedAt": "2020-05-21T22:40:28.910Z"
+    },
+    {
+      "id": "Qz6gjzdO_",
+      "uuid": "8b7564d0-3690-4982-8588-fc2135045744",
+      "userId": "gApyGpRoP",
+      "bankName": "dsgfdfg",
+      "accountNumber": "456456456",
+      "routingNumber": "123165456",
+      "isDeleted": false,
+      "createdAt": "2022-01-21T08:34:12.941Z",
+      "modifiedAt": "2022-01-21T08:34:12.941Z"
     }
   ],
   "transactions": [

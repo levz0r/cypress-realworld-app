@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
-import passport from "passport";
 import express, { Request, Response } from "express";
+import passport from "passport";
 import { User } from "../src/models/user";
 import { getUserBy, getUserById } from "./database";
 
@@ -33,6 +33,30 @@ passport.serializeUser(function (user: User, done) {
 passport.deserializeUser(function (id: string, done) {
   const user = getUserById(id);
   done(null, user);
+});
+
+router.get("/redirect", (req, res) => {
+  const target = req.params.target;
+  if (!target) {
+    res.status(400);
+    return;
+  }
+  let url;
+  switch (target) {
+    case "google":
+      url = "https://www.google.com";
+      break;
+    case "yahoo":
+      url = "https://yahoo.com";
+      break;
+    case "bing":
+      url = "https://bing.com";
+      break;
+    default:
+      res.status(404);
+      return;
+  }
+  res.redirect(url);
 });
 
 // authentication routes
